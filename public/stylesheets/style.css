@@ -1,0 +1,53 @@
+table,
+th,
+td {
+  border: 1px #00f;
+}
+body {
+  padding-top: 60px;
+}
+html,
+body {
+  height: 100%;
+}
+.footer {
+  background-color: #474444;
+}
+.center-text {
+  text-align: center;
+}
+.credit {
+  margin: 20px;
+}
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -60px;
+}
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+.sidebar-nav {
+  padding: 9px 0;
+}
+@media ( max-width: 980 px) {
+  .navbar-text.pull-right {
+    float: none;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+#map-canvas
+{
+      width: 100%;
+        height: 450px;
+          margin: 20px 0 20px 0;
+}
+
+#map-canvas img {
+    max-width: none;
+}
+}
