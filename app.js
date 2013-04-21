@@ -23,7 +23,7 @@
   var tes = new TwitterEventStreamer();
   var geocoder = new Geocoder();
 
-  tes.stream('love');
+  tes.stream('Singh');
   var tweetcounter = 0;
 
 

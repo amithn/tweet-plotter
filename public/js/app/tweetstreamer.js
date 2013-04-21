@@ -9,13 +9,6 @@
               mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
-
-            var marker = new google.maps.Marker({
-                            position: myLatlng,
-                            map: map,
-                            title: 'Hello World!',
-                            animation: google.maps.Animation.DROP
-            });
      }
     
     $(document).ready(function() {
@@ -34,13 +27,30 @@
                     $('#tweetcount').html(tweet.count);             
               }
             var tweetLatLon = new google.maps.LatLng(tweet.lat, tweet.lon);     
+            
+            var infoWindowText = '<div id="content">' + 
+                                 '<div id="bodyContent">' + 
+                                 tweet.text +    
+                                 '</div>' + 
+                                 '</div>';
+            
+            var infowindow = new google.maps.InfoWindow({
+                     content: infoWindowText,
+                     maxWidth: 200
+            });
+
+
             var marker = new google.maps.Marker({
                             position: tweetLatLon,
                             map: map,
-                            title: 'Hello World!',
+                            title: '@' + tweet.user,
                             animation: google.maps.Animation.DROP
             });
-      }); 
-      google.maps.event.addDomListener(window, 'load', initialize);
+            
+            google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map,marker);
+            });
+        });
+            google.maps.event.addDomListener(window, 'load', initialize);
    });    
         
