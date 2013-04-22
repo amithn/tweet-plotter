@@ -17,6 +17,5 @@ tweet-plotter
     -------------
     1)  When the lat, lon info is in the tweet don't lookup the address using geo-coding service.
     2)  When using web sockets it now services only the most recent client. Make it broadcast to all clients.
-    3)  Make the keywords per user. Currently it is hard coded in the streamer. Twitters event streaming API does not let more than 
-        one connection i guess. 
+    3)  Make the keywords per user. Currently it is hard coded in the streamer. Twitters event streaming API does not let more than one connection i guess. 
     
