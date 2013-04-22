@@ -1,7 +1,7 @@
 tweet-plotter
 =============
 
-    Plots tweets in real-time using Google maps - Node.js.
+    Plots tweets in real-time on Google maps - using Node.js, socket.io & Google geo-coding service.
 
     Tweet-plotter subscribes to a particular keyword and shows tweets in real-time. 
     It uses the geo-coding service from Google to lookup the user address before plotting. 
