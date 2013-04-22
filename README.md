@@ -9,9 +9,9 @@ tweet-plotter
     So the sequence of events are like so: 
 
     1)  Receives an event from Twitter using the streaming API.
-    2)  Looks up the address using Geo-coding api. Note that there is a limit to this 2500 requests per day for free usage.
+    2)  Looks up the address using Geo-coding api. Note that there is a limit to this 2500 requests per day for free usage. Read this https://developers.google.com/maps/documentation/geocoding/#Limits. Your IP gets blacklisted afterwards for 24 hours.
     3)  Send the event over websockets to the browser. 
-    4)  Browser plots the tweet on Google maps using the latitude and longitude information looked up already from Google Maps.
+    4)  Browser plots the tweet on Google maps using the latitude and longitude information looked up already from      Google geo coding service.
 
     TODO:
     -------------
