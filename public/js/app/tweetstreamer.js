@@ -16,7 +16,8 @@
         socket.on('tweet', function (tweet) {
              console.log(tweet);
              var row = '<tr><td>' + tweet.user + '</td><td>' + tweet.text + '</td></th>';
-             if( $('#tweets tr').size() > 8) {
+             
+             /*if( $('#tweets tr').size() > 8) {
                 $('#tweets tr:last').fadeOut(500,function(row) {
                     $('#tweets tr:last').remove();    
                     $('#tweets tr:first').after(row);             
@@ -25,7 +26,8 @@
                } else {
                     $('#tweets tr:first').after(row);             
                     $('#tweetcount').html(tweet.count);             
-              }
+              } */
+
             var tweetLatLon = new google.maps.LatLng(tweet.lat, tweet.lon);     
             
             var infoWindowText = '<div id="content">' + 
@@ -50,6 +52,8 @@
             google.maps.event.addListener(marker, 'click', function() {
                     infowindow.open(map,marker);
             });
+            $('#tweetcount').html(tweet.count);             
+            $('#failed-lookups').html(tweet.failedLookUps);             
         });
             google.maps.event.addDomListener(window, 'load', initialize);
    });    

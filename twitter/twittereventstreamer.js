@@ -1,7 +1,9 @@
-
+    
     sys = require('sys');
     events = require('events');
     
+    require('./credentials');
+
     var twitter = require('ntwitter');
     
     function TwitterEventStreamer() {
@@ -13,13 +15,9 @@
     TwitterEventStreamer.prototype.stream = function(keyword) {
         var self = this;
         
-        var twit = new twitter({
-            consumer_key: 'msSPQN41ry6Bmz1DWEQ',
-            consumer_secret: 'XJgvlLNq0HZZ9T3g1a0MdoXnYqEg0hnArfUIgScbB0',
-            access_token_key: '700581722-t3azV65w0ee8qlV7XCfP2ZY9FYTqHR6b0a9x24UV',
-            access_token_secret: 'kwQESpfOa3gYqe8ZFaidYG2sKTcD5HAVyDY35J8'
-        });
-        
+        var twitterCredentials = new TwitterCredentials(); 
+        var twit = new twitter(twitterCredentials.getSecrets());
+
         counter = 0;
              
         twit.stream('statuses/filter',{track: keyword }, function(stream) {

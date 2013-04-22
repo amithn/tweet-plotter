@@ -23,7 +23,7 @@
   var tes = new TwitterEventStreamer();
   var geocoder = new Geocoder();
 
-  tes.stream('Singh');
+  tes.stream('India');
   var tweetcounter = 0;
 
 
@@ -57,25 +57,29 @@
         websocket = socket;
   });
   
+  var failedLookUps = 0;
   tes.on('tweet', function(tweet) {
-        console.log('Tweet [' + ++tweetcounter +  '] received from ' + tweet.user.name + ',' + 
+        ++tweetcounter;
+        console.log('Tweet [' + tweetcounter +  '] received from ' + tweet.user.name + ',' + 
                                    tweet.user.location); 
         console.log('Tweet looks like : %j',tweet);
 
         geocoder.geocode(tweet.user.location, function(err, geodata) {
             if(!err) {
-                console.log('Tweet [' + ++tweetcounter +  '] received from ' + tweet.user.name + ',' + 
+                console.log('Tweet [' + tweetcounter +  '] received from ' + tweet.user.name + ',' + 
                                      tweet.user.location +  
                                      ' Lat :' + geodata.lat + 
                                      ' Lon :' + geodata.lon);
-                ++tweetcounter;
                 if(websocket !== null) {
                     websocket.emit('tweet', { user : tweet.user.name , text: tweet.text, lat: geodata.lat ,
-                                                lon: geodata.lon , count : tweetcounter });
+                                                lon: geodata.lon , count : tweetcounter, 
+                                                failedLookUps: failedLookUps
+                                            });
                 }   
             } else {
                 console.log('Could not resolve location for ' + tweet.user.location 
                                                + ' error was this %j', err);
+                failedLookUps++;
             }
         });
   });         
