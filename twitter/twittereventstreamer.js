@@ -22,8 +22,6 @@
              
         twit.stream('statuses/filter',{track: keyword }, function(stream) {
                   stream.on('data', function(tweet) {
-  //                      console.log('The [ ' + ++counter + ' ] tweet from ' + tweet.user.name + ' , '
-    //                                            + tweet.user.location);
                         self.emit('tweet', tweet);
                   });
                   
@@ -35,6 +33,5 @@
             }
         );
     }
-    
     module.exports = TwitterEventStreamer;
     

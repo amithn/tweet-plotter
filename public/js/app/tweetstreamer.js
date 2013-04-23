@@ -15,7 +15,7 @@
         var socket = io.connect('http://localhost:3000');
         socket.on('tweet', function (tweet) {
              console.log(tweet);
-             var row = '<tr><td>' + tweet.user + '</td><td>' + tweet.text + '</td></th>';
+             //var row = '<tr><td>' + tweet.user + '</td><td>' + tweet.text + '</td></th>';
              
              /*if( $('#tweets tr').size() > 8) {
                 $('#tweets tr:last').fadeOut(500,function(row) {
@@ -32,6 +32,7 @@
             
             var infoWindowText = '<div id="content">' + 
                                  '<div id="bodyContent">' + 
+                                 '<img src=' +  tweet.profileImage + ' /></br>' + 
                                  tweet.text +    
                                  '</div>' + 
                                  '</div>';

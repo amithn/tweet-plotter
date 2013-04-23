@@ -60,24 +60,25 @@
   var failedLookUps = 0;
   tes.on('tweet', function(tweet) {
         ++tweetcounter;
-        console.log('Tweet [' + tweetcounter +  '] received from ' + tweet.user.name + ',' + 
+        logger.debug('Tweet [' + tweetcounter +  '] received from ' + tweet.user.name + ',' + 
                                    tweet.user.location); 
         console.log('Tweet looks like : %j',tweet);
 
         geocoder.geocode(tweet.user.location, function(err, geodata) {
             if(!err) {
-                console.log('Tweet [' + tweetcounter +  '] received from ' + tweet.user.name + ',' + 
+                logger.debug('Tweet [' + tweetcounter +  '] received from ' + tweet.user.name + ',' + 
                                      tweet.user.location +  
                                      ' Lat :' + geodata.lat + 
                                      ' Lon :' + geodata.lon);
                 if(websocket !== null) {
                     websocket.emit('tweet', { user : tweet.user.name , text: tweet.text, lat: geodata.lat ,
+                                                profileImage : tweet.user.profile_image_url,
                                                 lon: geodata.lon , count : tweetcounter, 
                                                 failedLookUps: failedLookUps
                                             });
                 }   
             } else {
-                console.log('Could not resolve location for ' + tweet.user.location 
+                logger.debug('Could not resolve location for ' + tweet.user.location 
                                                + ' error was this %j', err);
                 failedLookUps++;
             }
