@@ -13,7 +13,7 @@ html
     script(type='text/javascript', src='/socket.io/socket.io.js');
     script(type="text/javascript", src='https://maps.googleapis.com/maps/api/js?key=AIzaSyAkZRfRG9aRJPoVEuxI8mZLSs3Ouh-SVV4&sensor=false')
    
-  body   
+  body#page-body   
     div.container
       div.navbar.navbar-inverse.navbar-fixed-top
         div.navbar-inner
@@ -25,11 +25,17 @@ html
             a(class="brand" , href="#")  TweetLocator
             div.nav-collapse.collapse    
                p.navbar-text.pull-right 
+                 span Positive
+                 span#positive.badge.badge-success   
+                 &nbsp;&nbsp;&nbsp; 
+                 span Negative 
+                 span#negative.badge.badge-important   
+                 &nbsp;&nbsp;&nbsp; 
                  span Failed Geo Coding Lookups 
-                 span#failed-lookups.badge.badge-important   0
+                 span#failed-lookups.badge.badge-important   
                  &nbsp;&nbsp;&nbsp; 
                  span Plotted tweets 
-                 span#tweetcount.badge.badge-success  0
+                 span#tweetcount.badge.badge-success  
                  span &nbsp;&nbsp;&nbsp; 
       
     block content1

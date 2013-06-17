@@ -53,17 +53,8 @@
             google.maps.event.addListener(marker, 'click', function() {
                     infowindow.open(map,marker);
             });
-            
-            $('#positive').html(Math.round((tweet.positive / 255) * 100) + ' % ');             
-            $('#negative').html(Math.round((tweet.negative / 255) * 100) + ' % ');             
             $('#tweetcount').html(tweet.count);             
             $('#failed-lookups').html(tweet.failedLookUps);             
-	        
-            emotion = 'rgb(' + tweet.negative + ', ' + tweet.positive + ', ' + '0)'; 
-            console.log('emotion is ' + emotion);
-             
-            $('#page-body').css({'background-color': emotion});
-
         });
             google.maps.event.addDomListener(window, 'load', initialize);
    });    

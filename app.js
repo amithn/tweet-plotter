@@ -8,6 +8,8 @@
   var server = require('http').createServer(app)
   var io = require('socket.io').listen(server);
   var stylus = require('stylus');
+  var sentiment = require('sentiment');  
+
 
   server.listen(3000);
 
@@ -23,7 +25,7 @@
   var tes = new TwitterEventStreamer();
   var geocoder = new Geocoder();
 
-  tes.stream('India');
+  tes.stream('tplotter');
   var tweetcounter = 0;
 
 
@@ -58,29 +60,57 @@
   });
   
   var failedLookUps = 0;
+  
+  var positive = 0;
+  var negative = 0;
+
   tes.on('tweet', function(tweet) {
         ++tweetcounter;
         logger.debug('Tweet [' + tweetcounter +  '] received from ' + tweet.user.name + ',' + 
                                    tweet.user.location); 
-        console.log('Tweet looks like : %j',tweet);
 
-        geocoder.geocode(tweet.user.location, function(err, geodata) {
-            if(!err) {
-                logger.debug('Tweet [' + tweetcounter +  '] received from ' + tweet.user.name + ',' + 
+        sentiment(tweet.text, function(err, results) {
+            console.log('Score is ' + results.score);
+            if(results.score > 0 ) {
+                positive++;
+            } else {
+                negative++;
+            }
+
+            score = calculateRG(positive, negative);
+            console.log('Positive - ' + score.positive + ' Negative ' + score.negative);
+
+            geocoder.geocode(tweet.user.location, function(err, geodata) {
+                if(!err) {
+                    logger.debug('Tweet [' + tweetcounter +  '] received from ' + tweet.user.name + ',' + 
                                      tweet.user.location +  
                                      ' Lat :' + geodata.lat + 
                                      ' Lon :' + geodata.lon);
-                if(websocket !== null) {
-                    websocket.emit('tweet', { user : tweet.user.name , text: tweet.text, lat: geodata.lat ,
+                    if(websocket !== null) {
+                        websocket.emit('tweet', { user : tweet.user.name , text: tweet.text, lat: geodata.lat ,
                                                 profileImage : tweet.user.profile_image_url,
                                                 lon: geodata.lon , count : tweetcounter, 
-                                                failedLookUps: failedLookUps
+                                                failedLookUps: failedLookUps,
+						                        positive: score.positive,
+						                        negative: score.negative
                                             });
-                }   
-            } else {
-                logger.debug('Could not resolve location for ' + tweet.user.location 
+                    }   
+                } else {
+                    logger.debug('Could not resolve location for ' + tweet.user.location 
                                                + ' error was this %j', err);
-                failedLookUps++;
-            }
-        });
-  });         
+                    failedLookUps++;
+                    }
+           });
+      });
+  });
+  
+           
+  function calculateRG(positive, negative) {
+    var total  = positive + negative;
+    var green = Math.round( (positive / total) * 255 );
+    var red = Math.round( (negative / total ) * 255 );
+    return {
+        'positive' : green,
+        'negative' : red
+    }
+  }

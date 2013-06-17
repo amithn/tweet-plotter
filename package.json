@@ -11,7 +11,8 @@
     "ntwitter": "0.5.0",
     "geocoder": "0.1.0",
     "socket.io": "0.9.14",
-    "winston": "0.6.2"
+    "winston": "0.6.2",
+    "sentiment": "*"
   },
   "engines": {
     "node": "0.8.x",

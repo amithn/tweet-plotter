@@ -1,0 +1,91 @@
+  
+/**    
+ * Module dependencies.
+ */
+
+  var express = require('express');
+  var app = express();
+  var server = require('http').createServer(app)
+  var io = require('socket.io').listen(server);
+  var stylus = require('stylus');
+  var sentiment = require('sentiment');
+  var SentimentClassifier = require('node-sentiment');
+  var classifier = new SentimentClassifier;
+
+  server.listen(3000);
+
+  var TwitterEventStreamer = require('./twitter/twittereventstreamer');
+  var Geocoder = require('./geocoder/geocoder');
+
+
+  var winston = require('winston');
+  var logger = new (winston.Logger)({
+      transports: [new (winston.transports.Console)({ level: 'debug' })]
+  })
+
+  var tes = new TwitterEventStreamer();
+  var geocoder = new Geocoder();
+
+  tes.stream('India');
+  var tweetcounter = 0;
+
+
+  /* Stylus compile */
+  function compile(str, path) {
+     return stylus(str)
+    .set('filename', path)
+    .use(nib())
+  }
+  app.use(express.logger('dev'));
+  app.use(express.bodyParser());
+  app.use(express.cookieParser());
+  app.use(express.session({secret: 'sea-animal'}));
+  app.use(express.static(__dirname + '/public'))
+  app.use(stylus.middleware(
+    { src: __dirname + '/public'
+      , compile: compile
+    }
+  ))
+  app.set('views', __dirname + '/views')
+  app.set('view engine', 'jade')
+
+
+  app.get('/tweets', function(req , res){
+	  var user = req.session.user || {};
+	  res.render('tweets', {title: 'Tweets'});
+  }); 
+ 
+  var websocket = null;
+  io.sockets.on('connection', function (socket) {
+        websocket = socket;
+  });
+  
+  var failedLookUps = 0;
+  tes.on('tweet', function(tweet) {
+        ++tweetcounter;
+        //logger.debug('Tweet [' + tweetcounter +  '] received from ' + tweet.user.name + ',' + 
+        //                           tweet.user.location); 
+        //console.log('Tweet looks like : %j',tweet);
+
+        console.log('Tweet was ' + tweet.text + ' score is %j',classifier.classify(tweet.text));
+
+        geocoder.geocode(tweet.user.location, function(err, geodata) {
+            if(!err) {
+                //logger.debug('Tweet [' + tweetcounter +  '] received from ' + tweet.user.name + ',' + 
+                  //                   tweet.user.location +  
+                    //                 ' Lat :' + geodata.lat + 
+                      //               ' Lon :' + geodata.lon);
+                if(websocket !== null) {
+                    websocket.emit('tweet', { user : tweet.user.name , text: tweet.text, lat: geodata.lat ,
+                                                profileImage : tweet.user.profile_image_url,
+                                                lon: geodata.lon , count : tweetcounter, 
+                                                failedLookUps: failedLookUps
+                                            });
+                }   
+            } else {
+               // logger.debug('Could not resolve location for ' + tweet.user.location 
+                //                               + ' error was this %j', err);
+                failedLookUps++;
+            }
+        });
+  });         
