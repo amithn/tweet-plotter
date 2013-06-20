@@ -25,7 +25,7 @@
   var tes = new TwitterEventStreamer();
   var geocoder = new Geocoder();
 
-  tes.stream('tplotter');
+  tes.stream('Obama');
   var tweetcounter = 0;
 
 
