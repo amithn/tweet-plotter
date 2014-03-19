@@ -19,3 +19,13 @@ tweet-plotter
     2)  When using web sockets it now services only the most recent client. Make it broadcast to all clients.
     3)  Make the keywords per user. Currently it is hard coded in the streamer. Twitters event streaming API does not let more than one connection i guess. 
     
+    RUNNING:
+    --------
+    1) clone
+    2) npm install
+    3) http://localhost:3000/tweets
+    4) joy! :-)
+
+
+
+
